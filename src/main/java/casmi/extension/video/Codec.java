@@ -19,11 +19,39 @@
 
 package casmi.extension.video;
 
-/**
- * 
- * @author T. Takeuchi
- *
- */
-public class Video {
+import com.xuggle.xuggler.ICodec;
+
+public enum Codec {
+
+    H264,
+
+    MPEG4,
+
+    /** wmv3. */
+    WMV,
+
+    /** flv1. */
+    FLV,
+
+    ;
+
+    public static final Codec getDefaultCodec() {
+        return MPEG4;
+    }
+
+    public static final ICodec.ID toXugglerCodec(Codec codec) {
+        switch (codec) {
+        case H264:
+            return ICodec.ID.CODEC_ID_H264;
+        case MPEG4:
+            return ICodec.ID.CODEC_ID_MPEG4;
+        case WMV:
+            return ICodec.ID.CODEC_ID_WMV3;
+        case FLV:
+            return ICodec.ID.CODEC_ID_FLV1;
+        }
+
+        return null; // dummy
+    }
 
 }
