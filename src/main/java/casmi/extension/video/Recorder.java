@@ -31,17 +31,19 @@ import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 
 /**
+ * Capture sequential images from casmi Applet and export as a movie.
+ * <p>
+ * This extension uses xuggle video library.  
  * 
  * @author T. Takeuchi
- *
  */
 public class Recorder implements Updatable {
 
     private final Applet applet;
     
     private IMediaWriter mediaWriter;
-    private boolean recordFlag = false;
-    private boolean recordBackground = true;
+    private boolean isRecording = false;
+    private boolean recordInBackground = true;
     private int recordTime = 0;
     private int recordSpan = 0;
     
@@ -51,14 +53,14 @@ public class Recorder implements Updatable {
     
     @Override
     public void update() {
-        if (recordFlag) {
-            BufferedImage bi = Screenshot.readToBufferedImage(applet.getWidth(), applet.getHeight(), !recordBackground);
+        if (isRecording) {
+            BufferedImage bi = Screenshot.readToBufferedImage(applet.getWidth(), applet.getHeight(), !recordInBackground);
             if (recordTime <= 0) {
                 recordTime = DateUtil.millis();
             }
             int elapse = DateUtil.millis() - recordTime;
             if (0 < recordSpan && recordSpan < elapse) {
-                stopRecord();
+                stop();
             }
             mediaWriter.encodeVideo(0, bi, elapse, TimeUnit.MILLISECONDS);
         }
@@ -70,8 +72,8 @@ public class Recorder implements Updatable {
      * @param file
      *            an output file.
      */
-    public void record(String file) {
-        record(file, true, 0);
+    public void start(String file) {
+        start(file, true, 0);
     }
     
     /**
@@ -85,8 +87,8 @@ public class Recorder implements Updatable {
      *            records for specified seconds. if specifies 0, records until
      *            call {@link #stopRecord()}.
      */
-    public void record(String file, boolean background, int sec) {
-        record(file, background, sec, Codec.getDefaultCodec());
+    public void start(String file, boolean background, int sec) {
+        start(file, background, sec, Codec.getDefaultCodec());
     }
     
     /**
@@ -98,29 +100,73 @@ public class Recorder implements Updatable {
      *            if true, records with background.
      * @param sec
      *            records for specified seconds. if specifies 0, records until
-     *            call {@link #stopRecord()}.
+     *            call {@link #stop()}.
      * @param codec
      *            a codec of a movie.
      */
-    public void record(String file, boolean background, int sec, Codec codec) {
-        stopRecord();
+    public void start(String file, boolean background, int sec, Codec codec) {
+        stop();
 
         mediaWriter = ToolFactory.makeWriter(file);
         mediaWriter.addVideoStream(0, 0, Codec.toXugglerCodec(codec), 
                                    applet.getWidth(), applet.getHeight());
-        recordBackground = background;
+        recordInBackground = background;
         recordSpan = sec * 1000;
         recordTime = 0;
-        recordFlag = true;
+        isRecording = true;
+        
+        applet.addUpdateObject(this);
+    }
+    
+    /**
+     * @param file
+     * @deprecated
+     */
+    public void record(String file) {
+        start(file, true, 0);
+    }
+    
+    /**
+     * @param file
+     * @param background
+     * @param sec
+     * @deprecated
+     */
+    public void record(String file, boolean background, int sec) {
+        start(file, background, sec, Codec.getDefaultCodec());
+    }
+    
+    /**
+     * @param file
+     * @param background
+     * @param sec
+     * @param codec
+     * @deprecated
+     */
+    public void record(String file, boolean background, int sec, Codec codec) {
+        start(file, background, sec, codec);
     }
     
     /**
      * Stops recording.
      */
-    public void stopRecord() {
-        recordFlag = false;
-        if (mediaWriter != null) {
+    public void stop() {
+        isRecording = false;
+        applet.removeUpdateObject(this);
+        if (mediaWriter != null && mediaWriter.isOpen()) {
             mediaWriter.close();
         }
+    }
+    
+    /**
+     * Stops recording.
+     * @deprecated
+     */
+    public void stopRecord() {
+        stop();
+    }
+
+    public boolean isRecording() {
+        return isRecording;
     }
 }
