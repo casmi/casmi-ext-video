@@ -1,6 +1,6 @@
 /*
  *   casmi-ext-video
- *   http://casmi.github.com/
+ *   https://github.com/casmi/casmi-ext-video
  *   Copyright (C) 2012, Xcoo, Inc.
  *
  *  casmi is free software: you can redistribute it and/or modify
@@ -21,6 +21,9 @@ package casmi.extension.video;
 
 import com.xuggle.xuggler.ICodec;
 
+/**
+ * @author T. Takeuchi
+ */
 public enum Codec {
 
     H264,

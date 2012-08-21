@@ -50,6 +50,6 @@
 	</plugins>
   </build>
   <name>casmi-ext-video</name>
-  <url>http://casmi.github.com</url>
+  <url>https://github.com/casmi/casmi-ext-video</url>
   <description>casmi extension for recording movie</description>
 </project>

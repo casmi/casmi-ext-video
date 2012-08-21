@@ -1,6 +1,6 @@
 /*
  *   casmi-ext-video
- *   http://casmi.github.com/
+ *   https://github.com/casmi/casmi-ext-video
  *   Copyright (C) 2012, Xcoo, Inc.
  *
  *  casmi is free software: you can redistribute it and/or modify
@@ -33,7 +33,8 @@ import com.xuggle.mediatool.ToolFactory;
 /**
  * Capture sequential images from casmi Applet and export as a movie.
  * <p>
- * This extension uses xuggle video library.  
+ * This extension uses <a href=http://www.xuggle.com/xuggler>Xuggler</a> video
+ * library.  
  * 
  * @author T. Takeuchi
  */
