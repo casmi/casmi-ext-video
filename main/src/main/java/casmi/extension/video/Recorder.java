@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 import casmi.Applet;
 import casmi.Updatable;
-import casmi.util.DateUtil;
 
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.xuggle.mediatool.IMediaWriter;
@@ -45,8 +44,8 @@ public class Recorder implements Updatable {
     private IMediaWriter mediaWriter;
     private boolean isRecording = false;
     private boolean recordInBackground = true;
-    private int recordTime = 0;
-    private int recordSpan = 0;
+    private long recordTime = 0;
+    private long recordSpan = 0;
     
     public Recorder(Applet applet) {
         this.applet = applet;
@@ -57,9 +56,9 @@ public class Recorder implements Updatable {
         if (isRecording) {
             BufferedImage bi = Screenshot.readToBufferedImage(applet.getWidth(), applet.getHeight(), !recordInBackground);
             if (recordTime <= 0) {
-                recordTime = DateUtil.millis();
+                recordTime = System.currentTimeMillis();
             }
-            int elapse = DateUtil.millis() - recordTime;
+            long elapse = System.currentTimeMillis() - recordTime;
             if (0 < recordSpan && recordSpan < elapse) {
                 stop();
             }

@@ -31,7 +31,6 @@ import casmi.graphics.element.MouseClickCallback;
 import casmi.graphics.element.MouseOverCallback;
 import casmi.tween.Tween;
 import casmi.tween.TweenElement;
-import casmi.tween.TweenManager;
 import casmi.tween.TweenType;
 import casmi.tween.equations.Sine;
 import casmi.util.SystemUtil;
@@ -49,10 +48,9 @@ public class RecordExample extends Applet {
     
     Recorder recorder;
     
-    Circle circle       = new Circle(320, 240, 15);
-    Circle recordCircle = new Circle(610, 450, 15);
+    Circle circle = new Circle(320, 240, 15);
+    Circle button = new Circle(610, 450, 15);
     
-    TweenManager manager = new TweenManager();
     TweenElement te = new TweenElement(circle);    
     
     @Override
@@ -65,35 +63,35 @@ public class RecordExample extends Applet {
         circle.setEdgeColor(new RGBColor(0.0, 0.0));
         addObject(circle);
                
-        recordCircle.setFillColor(new RGBColor(ColorSet.RED, 0.5));
+        button.setFillColor(new RGBColor(ColorSet.RED, 0.5));
         
-        recordCircle.addMouseEventCallback(new MouseOverCallback() {
+        button.addMouseEventCallback(new MouseOverCallback() {
             @Override
             public void run(MouseOverTypes eventtype, Element element) {
                 switch (eventtype) {
                 case ENTERED:
                 case EXISTED:
-                    recordCircle.setStroke(true);
-                    recordCircle.setStrokeColor(ColorSet.WHITE);
+                    button.setStroke(true);
+                    button.setStrokeColor(ColorSet.WHITE);
                     break;
                 case EXITED:
-                    recordCircle.setStroke(false);
+                    button.setStroke(false);
                     break;
                 }
             }
         });
         
-        recordCircle.addMouseEventCallback(new MouseClickCallback() {
+        button.addMouseEventCallback(new MouseClickCallback() {
             @Override
             public void run(MouseClickTypes eventtype, Element element) {
                 if (eventtype == MouseClickTypes.CLICKED) {
                     if (!recorder.isRecording()) {
                         recorder.start(RECORD_FILE);
-                        recordCircle.setFillColor(new RGBColor(ColorSet.RED));
+                        button.setFillColor(new RGBColor(ColorSet.RED));
                         System.out.println("start recording");
                     } else {
                         recorder.stop();
-                        recordCircle.setFillColor(new RGBColor(ColorSet.RED, 0.5));
+                        button.setFillColor(new RGBColor(ColorSet.RED, 0.5));
                         System.out.println("stop recording");
                         System.out.println("file: " + RECORD_FILE);
                     }
@@ -101,7 +99,7 @@ public class RecordExample extends Applet {
             }
         });
         
-        addObject(recordCircle);
+        addObject(button);
     }
 
     @Override
