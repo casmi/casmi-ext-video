@@ -38,33 +38,35 @@ import casmi.util.SystemUtil;
 /**
  * Recording example.
  * <p>
- * Records a window as a MPEG4 movie. 
- * 
+ * Records a window as a MPEG4 movie.
+ *
  * @author T. Takeuchi
+ *
+ * @see casmi.extension.video.Recorder
  */
 public class RecordExample extends Applet {
 
     static final String RECORD_FILE = SystemUtil.JAVA_TMP_PATH + "casmi_record.mp4";
-    
+
     Recorder recorder;
-    
+
     Circle circle = new Circle(320, 240, 15);
     Circle button = new Circle(610, 450, 15);
-    
-    TweenElement te = new TweenElement(circle);    
-    
+
+    TweenElement te = new TweenElement(circle);
+
     @Override
     public void setup() {
-        recorder = new Recorder(this);        
-        
+        recorder = new Recorder(this);
+
         setSize(640, 480);
-        
+
         circle.setCenterColor(ColorSet.YELLOW);
         circle.setEdgeColor(new RGBColor(0.0, 0.0));
         addObject(circle);
-               
+
         button.setFillColor(new RGBColor(ColorSet.RED, 0.5));
-        
+
         button.addMouseEventCallback(new MouseOverCallback() {
             @Override
             public void run(MouseOverTypes eventtype, Element element) {
@@ -80,7 +82,7 @@ public class RecordExample extends Applet {
                 }
             }
         });
-        
+
         button.addMouseEventCallback(new MouseClickCallback() {
             @Override
             public void run(MouseClickTypes eventtype, Element element) {
@@ -98,7 +100,7 @@ public class RecordExample extends Applet {
                 }
             }
         });
-        
+
         addObject(button);
     }
 
@@ -111,12 +113,11 @@ public class RecordExample extends Applet {
         	addTween(Tween.to(te, TweenType.POSITION, 500, Sine.OUT).target(getMouseX(), getMouseY()));
         }
     }
-    
+
     @Override
     public void keyEvent(KeyEvent e) {}
 
     public static void main(String[] args) {
         AppletRunner.run("casmi.extension.video.RecordExample", "Screen Recording Example");
     }
-    
 }

@@ -33,24 +33,24 @@ import com.xuggle.mediatool.ToolFactory;
  * Capture sequential images from casmi Applet and export as a movie.
  * <p>
  * This extension uses <a href=http://www.xuggle.com/xuggler>Xuggler</a> video
- * library.  
- * 
+ * library.
+ *
  * @author T. Takeuchi
  */
 public class Recorder implements Updatable {
 
     private final Applet applet;
-    
+
     private IMediaWriter mediaWriter;
     private boolean isRecording = false;
     private boolean recordInBackground = true;
     private long recordTime = 0;
     private long recordSpan = 0;
-    
+
     public Recorder(Applet applet) {
         this.applet = applet;
     }
-    
+
     @Override
     public void update() {
         if (isRecording) {
@@ -65,20 +65,20 @@ public class Recorder implements Updatable {
             mediaWriter.encodeVideo(0, bi, elapse, TimeUnit.MILLISECONDS);
         }
     }
-    
+
     /**
      * Records the window as a movie file with background by H264 codec.
-     * 
+     *
      * @param file
      *            an output file.
      */
     public void start(String file) {
         start(file, true, 0);
     }
-    
+
     /**
      * Records the window as a movie file by H264 codec.
-     * 
+     *
      * @param file
      *            an output file.
      * @param background
@@ -90,10 +90,10 @@ public class Recorder implements Updatable {
     public void start(String file, boolean background, int sec) {
         start(file, background, sec, Codec.getDefaultCodec());
     }
-    
+
     /**
      * Records the window as a movie file.
-     * 
+     *
      * @param file
      *            an output file.
      * @param background
@@ -108,34 +108,36 @@ public class Recorder implements Updatable {
         stop();
 
         mediaWriter = ToolFactory.makeWriter(file);
-        mediaWriter.addVideoStream(0, 0, Codec.toXugglerCodec(codec), 
+        mediaWriter.addVideoStream(0, 0, Codec.toXugglerCodec(codec),
                                    applet.getWidth(), applet.getHeight());
         recordInBackground = background;
         recordSpan = sec * 1000;
         recordTime = 0;
         isRecording = true;
-        
+
         applet.addUpdateObject(this);
     }
-    
+
     /**
      * @param file
      * @deprecated
      */
+    @Deprecated
     public void record(String file) {
         start(file, true, 0);
     }
-    
+
     /**
      * @param file
      * @param background
      * @param sec
      * @deprecated
      */
+    @Deprecated
     public void record(String file, boolean background, int sec) {
         start(file, background, sec, Codec.getDefaultCodec());
     }
-    
+
     /**
      * @param file
      * @param background
@@ -143,10 +145,11 @@ public class Recorder implements Updatable {
      * @param codec
      * @deprecated
      */
+    @Deprecated
     public void record(String file, boolean background, int sec, Codec codec) {
         start(file, background, sec, codec);
     }
-    
+
     /**
      * Stops recording.
      */
@@ -157,11 +160,12 @@ public class Recorder implements Updatable {
             mediaWriter.close();
         }
     }
-    
+
     /**
      * Stops recording.
      * @deprecated
      */
+    @Deprecated
     public void stopRecord() {
         stop();
     }
